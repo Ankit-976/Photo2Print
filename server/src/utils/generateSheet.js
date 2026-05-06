@@ -1,47 +1,91 @@
 const sharp = require("sharp");
 
-const generateSheet = async (imageBuffer) => {
-
+const generateSheet = async (imageBuffer, photoCount) => {
   // Passport photo dimensions
   const passportWidth = 413;
   const passportHeight = 531;
 
   // Resize uploaded image
   const passportBuffer = await sharp(imageBuffer)
-
     .resize(passportWidth, passportHeight, {
-      fit: "cover"
+      fit: "cover",
     })
 
     .jpeg()
 
     .toBuffer();
 
-  // Create blank A4 canvas
+  // A4 canvas
+  const canvasWidth = 2480;
+  const canvasHeight = 3508;
+
+  // Create blank white canvas
   const canvas = sharp({
     create: {
-      width: 2480,
-      height: 3508,
+      width: canvasWidth,
+      height: canvasHeight,
       channels: 3,
-      background: "white"
-    }
+      background: "white",
+    },
   });
 
-  // Store all image positions
+  // Layout presets
+  const layouts = {
+    4: {
+      rows: 1,
+      cols: 4,
+    },
+
+    5: {
+      rows: 1,
+      cols: 5,
+    },
+
+    8: {
+      rows: 2,
+      cols: 4,
+    },
+
+    10: {
+      rows: 2,
+      cols: 5,
+    },
+
+    16: {
+      rows: 4,
+      cols: 4,
+    },
+  };
+
+  // Default to 8 if invalid
+  const selectedLayout = layouts[photoCount] || layouts[8];
+
+  const rows = selectedLayout.rows;
+  const cols = selectedLayout.cols;
+
+  // Gaps between photos
+  const gapX = 50;
+  const gapY = 50;
+
+  const startX = 80;
+  const startY = 80;
+
+  // Store image positions
   const composites = [];
 
-  // Generate 4x4 grid
-  for (let row = 0; row < 4; row++) {
+  // Generate grid
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const left = startX + col * (passportWidth + gapX);
 
-    for (let col = 0; col < 4; col++) {
+      const top = startY + row * (passportHeight + gapY);
 
       composites.push({
-
         input: passportBuffer,
 
-        top: 100 + row * 650,
+        top: Math.round(top),
 
-        left: 100 + col * 500
+        left: Math.round(left),
       });
     }
   }

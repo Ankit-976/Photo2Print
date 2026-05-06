@@ -1,18 +1,52 @@
-const generateSheet = require("../utils/generateSheet");
+const PDFDocument = require("pdfkit");
+
+const generateSheet = require(
+  "../utils/generateSheet"
+);
 
 const uploadPhoto = async (req, res) => {
 
   try {
 
-    // Generate A4 sheet buffer
-    const finalBuffer = await generateSheet(
-      req.file.buffer
+    // Photo count from frontend
+    const photoCount =
+      Number(req.body.photoCount) || 8;
+
+    // Generate A4 sheet
+    const finalBuffer =
+      await generateSheet(
+        req.file.buffer,
+        photoCount
+      );
+
+    // Create PDF
+    const doc = new PDFDocument({
+      size: "A4",
+      margin: 0
+    });
+
+    // Response headers
+    res.setHeader(
+      "Content-Type",
+      "application/pdf"
     );
 
-    // Send image directly
-    res.set("Content-Type", "image/jpeg");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=passport-sheet.pdf"
+    );
 
-    res.send(finalBuffer);
+    // Stream PDF
+    doc.pipe(res);
+
+    // Add image to PDF
+    doc.image(finalBuffer, 0, 0, {
+      width: 595,
+      height: 842
+    });
+
+    // Finish PDF
+    doc.end();
 
   } catch (error) {
 
