@@ -64,11 +64,11 @@ const generateSheet = async (imageBuffer, photoCount) => {
   const cols = selectedLayout.cols;
 
   // Gaps between photos
-  const gapX = 50;
-  const gapY = 50;
+  const gapX = 70;
+  const gapY = 70;
 
-  const startX = 80;
-  const startY = 80;
+  const startX = 70;
+  const startY = 70;
 
   // Store image positions
   const composites = [];
