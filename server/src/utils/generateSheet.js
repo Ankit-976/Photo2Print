@@ -1,91 +1,76 @@
 const sharp = require("sharp");
 
-const generateSheet = async (
-  imageBuffer,
-  photoCount
-) => {
+const generateSheet = async (imageBuffer, photoCount) => {
+  const passportWidth = 531;
+  const passportHeight = 413;
 
-  // Passport photo dimensions
-  const passportWidth = 413;
-  const passportHeight = 531;
+  const metadata = await sharp(imageBuffer).metadata();
 
-  // Resize uploaded image
-  const passportBuffer = await sharp(imageBuffer)
+  let image = sharp(imageBuffer);
 
+  if (metadata.width > metadata.height) {
+    image = image.rotate(90);
+  }
+
+  const passportBuffer = await image
     .resize(passportWidth, passportHeight, {
-      fit: "cover"
+      fit: "cover",
+      position: "attention",
     })
+
+    .rotate(90)
 
     .jpeg()
 
     .toBuffer();
 
-  // A4 canvas size
   const canvasWidth = 2480;
   const canvasHeight = 3508;
 
-  // Create blank white canvas
   const canvas = sharp({
     create: {
       width: canvasWidth,
       height: canvasHeight,
       channels: 3,
-      background: "white"
-    }
+      background: "white",
+    },
   });
 
-  // Spacing
-  const gapX = 70;
-  const gapY = 70;
+  const gapX = 80;
+  const gapY = 80;
 
-  // Starting margin
-  const startX = 60;
-  const startY = 60;
+  const startX = 50;
+  const startY = 50;
 
-  // Current positions
   let currentX = startX;
   let currentY = startY;
 
-  // Store image positions
   const composites = [];
 
-  // Generate dynamic layout
   for (let i = 0; i < photoCount; i++) {
-
-    // Move to next row if width exceeded
-    if (
-      currentX + passportWidth >
-      canvasWidth - startX
-    ) {
-
+    if (currentX + passportWidth > canvasWidth - startX) {
       currentX = startX;
 
-      currentY +=
-        passportHeight + gapY;
+      currentY += passportHeight + gapY;
     }
 
-    // Add image position
     composites.push({
-
       input: passportBuffer,
 
       top: Math.round(currentY),
 
-      left: Math.round(currentX)
+      left: Math.round(currentX),
     });
 
-    // Move right
-    currentX +=
-      passportWidth + gapX;
+    currentX += passportWidth + gapX;
   }
 
-  // Generate final A4 sheet
   const finalBuffer = await canvas
 
     .composite(composites)
 
     .jpeg({
-      quality: 100
+      quality: 100,
     })
 
     .toBuffer();
