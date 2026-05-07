@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+body {
+    z-index: 0;
+    background-image: url("../src/assets/bg.png");
+    backdrop-filter: blur(15px);
+    background-position: 50%;
+    background-size: cover;
+    background-attachment: fixed;
+    position: fixed;
+    inset: 0%;
+}
