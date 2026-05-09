@@ -8,6 +8,7 @@ const Form = () => {
 
       const handleSubmit = async (e) => {
         e.preventDefault();
+            console.log(import.meta.env.VITE_BASE_URL);
         
         const form = e.target;
         const data = new FormData(form);
