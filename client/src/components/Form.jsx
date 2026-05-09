@@ -8,13 +8,13 @@ const Form = () => {
 
       const handleSubmit = async (e) => {
         e.preventDefault();
-            console.log(import.meta.env.VITE_BASE_URL);
+            // console.log(import.meta.env.VITE_BASE_URL);
         
         const form = e.target;
         const data = new FormData(form);
 
         try {
-          const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/photos/upload`, data, {
+          const response = await axios.post(`https://photo2print.onrender.com/api/photos/upload`, data, {
             responseType: 'blob'
           });
           
