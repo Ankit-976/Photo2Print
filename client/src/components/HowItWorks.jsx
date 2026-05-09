@@ -5,6 +5,8 @@ const HowItWorks = ({ open, setOpen }) => {
         fixed inset-0
         flex justify-center items-center
         transition-all duration-500
+        z-10
+        p-5
 
         ${open ? "opacity-100 visible" : "opacity-0 invisible"}
       `}
@@ -26,7 +28,7 @@ const HowItWorks = ({ open, setOpen }) => {
           p-8
           rounded-3xl
 
-          bg-white/10
+          bg-black/70
           backdrop-blur-2xl
           border border-white/20
 
