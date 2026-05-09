@@ -13,7 +13,7 @@ const Form = () => {
         const data = new FormData(form);
 
         try {
-          const response = await axios.post('http://localhost:3000/api/photos/upload', data, {
+          const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/photos/upload`, data, {
             responseType: 'blob'
           });
           
