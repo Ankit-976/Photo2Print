@@ -5,7 +5,7 @@ const photoRoutes = require('./routes/photoRoutes');
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Update with your frontend URL
+    origin: 'https://photo2-print.vercel.app/', // Update with your frontend URL
 }));
 app.use(express.json());
 app.use('/api/photos', photoRoutes);
