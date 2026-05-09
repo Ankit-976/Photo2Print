@@ -9,7 +9,6 @@ const HowItWorks = ({ open, setOpen }) => {
         ${open ? "opacity-100 visible" : "opacity-0 invisible"}
       `}
     >
-
       <div
         onClick={() => setOpen(false)}
         className="
@@ -38,15 +37,13 @@ const HowItWorks = ({ open, setOpen }) => {
       >
         <h1 className="text-3xl text-white font-bold mb-4">How It Works</h1>
 
-        <p className="text-white/80">
-            <ul>
-                <li>Upload your image</li>
-                <li>Select photo count</li>
-                <li>Image will be processed and cropped</li>
-                <li>It will be arranged in a printable format</li>
-                <li>Download your printable PDF</li>
-            </ul>
-        </p>
+        <ul className="text-white/80">
+          <li>Upload your image</li>
+          <li>Select photo count</li>
+          <li>Image will be processed and cropped</li>
+          <li>It will be arranged in a printable format</li>
+          <li>Download your printable PDF</li>
+        </ul>
       </div>
     </div>
   );
